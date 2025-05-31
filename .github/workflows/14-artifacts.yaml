@@ -23,7 +23,7 @@ jobs:
               id: cache
               with:
                 path: 14-artifacts/node_modules
-                key: deps-node-modules-${{ hashFiles('14-artifact/app-nest/yarn.lock') }}
+                key: deps-node-modules-${{ hashFiles('14-artifacts/app-nest/yarn.lock') }}
             - name: Install dependecies
               if: steps.cache.outputs.cache-hit != 'true'
               run: yarn install
@@ -31,7 +31,6 @@ jobs:
               run: yarn test
             - name: Build code
               run: yarn run build
-            
             - name: Upload dist files
               uses: actions/upload-artifact@v4
               with:
@@ -43,7 +42,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Download dist artifact
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                 name: app
                 path: dist
