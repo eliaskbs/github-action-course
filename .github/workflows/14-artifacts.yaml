@@ -39,6 +39,7 @@ jobs:
                 path: 14-artifacts/app-nest/dist
               
     deploy:
+        needs: build
         runs-on: ubuntu-latest
         steps:
             - name: Download dist artifact
