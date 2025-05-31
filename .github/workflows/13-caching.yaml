@@ -1,0 +1,31 @@
+name: 13 - Using Caching
+on:
+    workflow_dispatch:
+        inputs:
+            use-cache:
+                description: Whether to execute cache step
+                type: boolean
+                default: true
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: 13-caching/nest-app
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                node-vesion: '22.x'
+            - name: Instll dependecies
+              run: yarn ci
+            
+            - name: Testing
+              run: yarn run test
+            
+            - name: Building
+              run: yarn run build
