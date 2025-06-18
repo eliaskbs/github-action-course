@@ -2,34 +2,41 @@ name: 15 - Using Metrix
 on:
   workflow_dispatch:
 jobs:
-  backwards-compatibility:
-    name: ${{ matrix.os }} - ${{ matrix.node-version }}
-    strategy:
-      fail-fast: false # Don't fail the job if one of the matrix permutations fails
-      matrix:
-        node-version: [18.x, 20.x, 21.x]
-        os:
-            - ubuntu-latest
-            - windows-latest
-        include:
+    backwards-compatibility:
+        name: ${{ matrix.os }} - ${{ matrix.node-version }}
+        strategy:
+            fail-fast: false # Don't fail the job if one of the matrix permutations fails
+            matrix:
+                node-version: [18.x, 20.x, 21.x]
+                os:
+                    - ubuntu-latest
+                    - windows-latest
+                include:
+                - os: ubuntu-latest
+                  node-version: 16.x
+                - os: ubuntu-latest
+                  node-version: 22.x
+                  tag: experimental
 
-          - os: ubuntu-latest
-            node-version: 16.x
-          - os: ubuntu-latest
-            node-version: 22.x
-            tag: experimental
-
-    runs-on: ${{ matrix.os }}
-    steps:
-        - name: Use Node.js ${{ matrix.node-version }}
-          uses: actions/setup-node@v3
-          with:
-            node-version: ${{ matrix.node-version }}
-        - name: Show tag matrix
-          
-          run: |
-            echo "Tag: ${{ matrix.tag }}"
-        - name: Perform some tests
-          run: echo "Running tests with Node.js ${{ matrix.node-version }} on ${{ matrix.os }}"
+        runs-on: ${{ matrix.os }}
+        steps:
+            -  name: Use Node.js ${{ matrix.node-version }}
+               uses: actions/setup-node@v3
+               with:
+                node-version: ${{ matrix.node-version }}
+            - name: Perform some tests
+              run: echo "Running tests with Node.js ${{ matrix.node-version }} on ${{ matrix.os }}"
+    include-example:
+        runs-on: ubuntu-latest
+        name: ${{ matrix.color }} - ${{ matrix.shape }} - ${{ matrix.size }}
+        strategy:
+            matrix:
+                color: [red, green]
+                shape: [circle, square]
+                size: [small, medium]
+                include:
+                - color: red
+                  shape: triangle
+                  
 
         
